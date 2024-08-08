@@ -118,7 +118,7 @@ echo ${JOB_TYPE}
 repos=(
 #    "https://github.com/googleapis/java-bigtable.git"
 #    "https://github.com/googleapis/java-bigquery.git"
-    "https://github.com/googleapis/java-bigquerystorage.git"
+#    "https://github.com/googleapis/java-bigquerystorage.git"
     "https://github.com/googleapis/java-datastore.git"
 #    "https://github.com/googleapis/java-firestore.git"
 #    "https://github.com/googleapis/java-logging.git"
@@ -185,7 +185,6 @@ integration)
             -Dgcloud.download.skip=true \
             -Dit.test=!ITBigQueryWrite*RetryTest \
             -Dsurefire.failIfNoSpecifiedTests=false \
-            -Dfailsafe.failIfNoSpecifiedTests=false \
             -T 1C
       else
         mvn clean verify -B -V -ntp \
@@ -199,10 +198,10 @@ integration)
       fi
 
       popd
-
-      unset DATASTORE_PROJECT_ID
-      unset IT_SERVICE_ACCOUNT_EMAIL
     done
+
+    unset DATASTORE_PROJECT_ID
+    unset IT_SERVICE_ACCOUNT_EMAIL
     RETURN_CODE=$?
     ;;
 graalvm)
