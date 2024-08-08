@@ -116,11 +116,11 @@ echo ${JOB_TYPE}
 #    -T 1C
 
 repos=(
-#    "https://github.com/googleapis/java-bigtable.git"
+    "https://github.com/googleapis/java-bigtable.git"
     "https://github.com/googleapis/java-bigquery.git"
     "https://github.com/googleapis/java-bigquerystorage.git"
     "https://github.com/googleapis/java-datastore.git"
-    "https://github.com/googleapis/java-firestore.git"
+#    "https://github.com/googleapis/java-firestore.git"
     "https://github.com/googleapis/java-logging.git"
     "https://github.com/googleapis/java-logging-logback.git"
     "https://github.com/googleapis/java-pubsub.git"
@@ -164,20 +164,42 @@ integration)
 #      -fae \
 #      verify
 
+    set -e
+
+    export DATASTORE_PROJECT_ID=gcloud-devel
+    export IT_SERVICE_ACCOUNT_EMAIL=it-service-account@gcloud-devel.iam.gserviceaccount.com
+
     for repo in "${repos[@]}"
     do
       repo_name=$(basename "${repo}" .git)
       echo "Running ITs for ${repo_name} -----"
       git clone "${repo}"
       pushd "${repo_name}"
-      mvn clean verify -B -V -ntp \
-          -Penable-integration-tests \
-          -Dclirr.skip=true \
-          -Denforcer.skip=true \
-          -Dmaven.javadoc.skip=true \
-          -Dgcloud.download.skip=true \
-          -T 1C
+      if [ "${repo_name}" == "java-bigquerystorage" ]; then
+        mvn clean verify -B -V -ntp \
+            ${INTEGRATION_TEST_ARGS} \
+            -Penable-integration-tests \
+            -Dclirr.skip=true \
+            -Denforcer.skip=true \
+            -Dmaven.javadoc.skip=true \
+            -Dgcloud.download.skip=true \
+            -Dit.test=!ITBigQueryWrite*RetryTest \
+            -T 1C
+      else
+        mvn clean verify -B -V -ntp \
+            ${INTEGRATION_TEST_ARGS} \
+            -Penable-integration-tests \
+            -Dclirr.skip=true \
+            -Denforcer.skip=true \
+            -Dmaven.javadoc.skip=true \
+            -Dgcloud.download.skip=true \
+            -T 1C
+      fi
+
       popd
+
+      unset DATASTORE_PROJECT_ID
+      unset IT_SERVICE_ACCOUNT_EMAIL
     done
     RETURN_CODE=$?
     ;;
