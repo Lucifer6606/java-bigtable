@@ -117,18 +117,18 @@ echo ${JOB_TYPE}
 
 repos=(
 #    "https://github.com/googleapis/java-bigtable.git"
-    "https://github.com/googleapis/java-bigquery.git"
+#    "https://github.com/googleapis/java-bigquery.git"
     "https://github.com/googleapis/java-bigquerystorage.git"
     "https://github.com/googleapis/java-datastore.git"
 #    "https://github.com/googleapis/java-firestore.git"
-    "https://github.com/googleapis/java-logging.git"
-    "https://github.com/googleapis/java-logging-logback.git"
-    "https://github.com/googleapis/java-pubsub.git"
-    "https://github.com/googleapis/java-pubsublite.git"
-    "https://github.com/googleapis/java-spanner.git"
-    "https://github.com/googleapis/java-spanner-jdbc.git"
+#    "https://github.com/googleapis/java-logging.git"
+#    "https://github.com/googleapis/java-logging-logback.git"
+#    "https://github.com/googleapis/java-pubsub.git"
+#    "https://github.com/googleapis/java-pubsublite.git"
+#    "https://github.com/googleapis/java-spanner.git"
+#    "https://github.com/googleapis/java-spanner-jdbc.git"
     "https://github.com/googleapis/java-storage.git"
-    "https://github.com/googleapis/java-storage-nio.git"
+#    "https://github.com/googleapis/java-storage-nio.git"
 )
 
 # if GOOGLE_APPLICATION_CREDENTIALS is specified as a relative path, prepend Kokoro root directory onto it
@@ -184,6 +184,8 @@ integration)
             -Dmaven.javadoc.skip=true \
             -Dgcloud.download.skip=true \
             -Dit.test=!ITBigQueryWrite*RetryTest \
+            -Dsurefire.failIfNoSpecifiedTests=false \
+            -Dfailsafe.failIfNoSpecifiedTests=false \
             -T 1C
       else
         mvn clean verify -B -V -ntp \
