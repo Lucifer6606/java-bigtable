@@ -116,7 +116,7 @@ echo ${JOB_TYPE}
 #    -T 1C
 
 repos=(
-    "https://github.com/googleapis/java-bigtable.git"
+#    "https://github.com/googleapis/java-bigtable.git"
     "https://github.com/googleapis/java-bigquery.git"
     "https://github.com/googleapis/java-bigquerystorage.git"
     "https://github.com/googleapis/java-datastore.git"
